@@ -7,9 +7,9 @@ export const analysisSteps: AnalysisStep[] = [
     description: '구매실적 데이터를 불러오고 있습니다...',
     messages: [
       '2023~2025년 구매실적 데이터를 불러오고 있어요. 잠시만 기다려 주세요...',
-      '자재 518개 로딩 완료 ✓',
-      '공급사 62개 매핑 완료 ✓',
-      '518개 자재, 62개 공급사 데이터를 확인했어요!',
+      '자재 574개 로딩 완료 ✓',
+      '공급사 40개 매핑 완료 ✓',
+      '574개 자재, 40개 공급사 데이터를 확인했어요!',
     ],
     duration: 2000,
   },
@@ -33,7 +33,7 @@ export const analysisSteps: AnalysisStep[] = [
     messages: [
       '첫 번째, 수량 변동성을 분석하고 있어요.',
       '평균 대비 ±20% 이상 변동한 자재를 찾고 있습니다...',
-      '수량 변동성 분석 완료: 91건 이상 징후 발견 ⚠️',
+      '수량 변동성 분석 완료: 110건 이상 징후 발견 ⚠️',
     ],
     duration: 1800,
   },
@@ -44,7 +44,7 @@ export const analysisSteps: AnalysisStep[] = [
     messages: [
       '두 번째, 단가 변동성을 확인하고 있어요.',
       '단가가 ±10% 이상 변동한 자재는 특히 주의가 필요해요.',
-      '단가 변동성 분석 완료: 7건 이상 징후 발견 🔴',
+      '단가 변동성 분석 완료: 5건 이상 징후 발견 🔴',
     ],
     duration: 1500,
   },
@@ -55,7 +55,7 @@ export const analysisSteps: AnalysisStep[] = [
     messages: [
       '세 번째, 계약 만료가 임박한 자재를 확인하고 있어요.',
       '3개월 이내 재계약이 필요한 자재를 찾을게요.',
-      '계약 임박 분석 완료: 77건 확인 📅',
+      '계약 임박 분석 완료: 88건 확인 📅',
     ],
     duration: 1500,
   },
@@ -66,7 +66,7 @@ export const analysisSteps: AnalysisStep[] = [
     messages: [
       '네 번째, 재고금액 변동을 분석하고 있어요.',
       '구매량 변동 대비 재고가 이상하게 변동한 자재를 찾습니다.',
-      '재고 괴리 분석 완료: 88건 이상 징후 발견 ⚠️',
+      '재고 괴리 분석 완료: 151건 이상 징후 발견 ⚠️',
     ],
     duration: 1800,
   },
@@ -77,7 +77,7 @@ export const analysisSteps: AnalysisStep[] = [
     messages: [
       '마지막으로, 발주건수 변동을 확인하고 있어요.',
       '구매금액 대비 발주 횟수가 비정상적인 경우를 탐지해요.',
-      '발주 괴리 분석 완료: 87건 이상 징후 발견 ⚠️',
+      '발주 괴리 분석 완료: 99건 이상 징후 발견 ⚠️',
     ],
     duration: 1800,
   },
@@ -85,114 +85,487 @@ export const analysisSteps: AnalysisStep[] = [
 
 export const analysisData: AnalysisData = {
   summary: {
-    total_materials: 518,
-    total_anomalies: 156,
-    high_risk: 23,
-    contract_expiring: 77,
+    total_materials: 574,
+    total_anomalies: 280,
+    high_risk: 43,
+    contract_expiring: 88,
     analysis_date: '2025-12-01',
-    total_suppliers: 62,
+    total_suppliers: 40,
   },
   rules: [
     {
       id: 1,
       name: '수량 변동성',
       description: '유효월 평균 대비 ±20% 이상 변동',
-      count: 91,
-      percentage: 17.6,
+      count: 110,
+      percentage: 19.2,
       icon: '📦',
     },
     {
       id: 2,
       name: '단가 변동성',
       description: '단가 평균 대비 ±10% 이상 변동',
-      count: 7,
-      percentage: 1.4,
+      count: 5,
+      percentage: 0.9,
       icon: '💰',
     },
     {
       id: 3,
       name: '계약 만료 임박',
       description: '3개월 이내 계약 만료 예정',
-      count: 77,
-      percentage: 14.9,
+      count: 88,
+      percentage: 15.3,
       icon: '📅',
     },
     {
       id: 4,
       name: '재고 괴리',
       description: '구매량 대비 재고 이상 변동',
-      count: 88,
-      percentage: 17.0,
+      count: 151,
+      percentage: 26.3,
       icon: '📊',
     },
     {
       id: 5,
       name: '발주 괴리',
       description: '구매금액 대비 발주건수 이상',
-      count: 87,
-      percentage: 16.8,
+      count: 99,
+      percentage: 17.2,
       icon: '📝',
     },
   ],
   details: {
     rule1: [
-      { code: '125076', name: '방오도료_TBT-Free_20L', supplier: 'KCC', avg_value: 3333, current_value: 84000, change_rate: 2420.0, risk_level: 'high', unit: 'EA', valid_months: 24 },
-      { code: '122456', name: '철판_SS400_6T_1219*2438', supplier: '포스코', avg_value: 1250, current_value: 2875, change_rate: 130.0, risk_level: 'high', unit: 'EA', valid_months: 18 },
-      { code: '124789', name: '용접와이어_1.2mm_20kg', supplier: '현대용접', avg_value: 890, current_value: 2047, change_rate: 130.0, risk_level: 'high', unit: 'EA', valid_months: 22 },
-      { code: '123012', name: '파이프_STPG_50A_SCH40', supplier: '세아제강', avg_value: 456, current_value: 912, change_rate: 100.0, risk_level: 'medium', unit: 'M', valid_months: 15 },
-      { code: '121345', name: '볼트_STS304_M16*50', supplier: '삼성볼트', avg_value: 2340, current_value: 4212, change_rate: 80.0, risk_level: 'medium', unit: 'EA', valid_months: 20 },
-      { code: '126789', name: '케이블_CV_4C_25SQ', supplier: 'LS전선', avg_value: 678, current_value: 1153, change_rate: 70.0, risk_level: 'medium', unit: 'M', valid_months: 16 },
-      { code: '127890', name: '밸브_버터플라이_6B', supplier: '한일밸브', avg_value: 234, current_value: 398, change_rate: 70.0, risk_level: 'low', unit: 'EA', valid_months: 14 },
-      { code: '128901', name: '개스킷_스파이럴_4B', supplier: '대한개스킷', avg_value: 567, current_value: 907, change_rate: 60.0, risk_level: 'low', unit: 'EA', valid_months: 19 },
-    ],
+      {
+            "code": "125076",
+            "name": "방오도료_TBT-Free_20L",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 3,
+            "avg_value": 3333.33,
+            "current_value": 84000.0,
+            "change_rate": 2420.0,
+            "unit": "EA"
+      },
+      {
+            "code": "118176",
+            "name": "빔_박스형_400*200*10T",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": 7333.33,
+            "current_value": 26000.0,
+            "change_rate": 254.5,
+            "unit": "EA"
+      },
+      {
+            "code": "118177",
+            "name": "엘보_45도_4B_SCH80_ASTM A234",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": 7333.33,
+            "current_value": 26000.0,
+            "change_rate": 254.5,
+            "unit": "EA"
+      },
+      {
+            "code": "112638",
+            "name": "맨홀커버_원형_600mm_SUS316",
+            "supplier": "포스코",
+            "risk_level": "medium",
+            "valid_months": 6,
+            "avg_value": 954022.17,
+            "current_value": 3271000.0,
+            "change_rate": 242.9,
+            "unit": "EA"
+      },
+      {
+            "code": "112638",
+            "name": "맨홀커버_원형_600mm_SUS316",
+            "supplier": "한국특수형강",
+            "risk_level": "high",
+            "valid_months": 5,
+            "avg_value": 1030000.0,
+            "current_value": 3327850.0,
+            "change_rate": 223.1,
+            "unit": "EA"
+      },
+      {
+            "code": "109577",
+            "name": "플랫바_150*12_6M",
+            "supplier": "포스코",
+            "risk_level": "medium",
+            "valid_months": 27,
+            "avg_value": 32.81,
+            "current_value": 72.0,
+            "change_rate": 119.4,
+            "unit": "EA"
+      },
+      {
+            "code": "118174",
+            "name": "버터플라이밸브_10K_8B",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 5,
+            "avg_value": 18600.0,
+            "current_value": 40000.0,
+            "change_rate": 115.1,
+            "unit": "EA"
+      },
+      {
+            "code": "103810",
+            "name": "강판_ASTM A36_20T*1500*6000",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 4,
+            "avg_value": 206250.0,
+            "current_value": 437500.0,
+            "change_rate": 112.1,
+            "unit": "EA"
+      }
+],
     rule2: [
-      { code: '122433', name: '용접봉_E7016_4.0mm*400mm', supplier: '포스코', avg_value: 155.7, current_value: 100.0, change_rate: -35.8, risk_level: 'high', unit: '원/EA', valid_months: 14 },
-      { code: '123558', name: '체크밸브_스윙형_10K_4B', supplier: '포스코', avg_value: 89500, current_value: 60388, change_rate: -32.5, risk_level: 'high', unit: '원/EA', valid_months: 18 },
-      { code: '113539', name: '용접봉_E7018_3.2mm*350mm', supplier: '포스코', avg_value: 142.3, current_value: 114.2, change_rate: -19.7, risk_level: 'medium', unit: '원/EA', valid_months: 12 },
-      { code: '134567', name: '플랜지_WN_RF_150_4B', supplier: '태광플랜지', avg_value: 45200, current_value: 38420, change_rate: -15.0, risk_level: 'medium', unit: '원/EA', valid_months: 16 },
-      { code: '145678', name: '파이프_STS304_2B_SCH10', supplier: '세아창원', avg_value: 78500, current_value: 67110, change_rate: -14.5, risk_level: 'low', unit: '원/M', valid_months: 20 },
-      { code: '156789', name: '엘보_90_LR_4B_SCH40', supplier: '한국피팅', avg_value: 12300, current_value: 10701, change_rate: -13.0, risk_level: 'low', unit: '원/EA', valid_months: 15 },
-      { code: '167890', name: '감속기_웜기어_50:1', supplier: '동양감속기', avg_value: 1250000, current_value: 1100000, change_rate: -12.0, risk_level: 'low', unit: '원/EA', valid_months: 24 },
-    ],
+      {
+            "code": "122433",
+            "name": "용접봉_E7016_4.0mm*400mm",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 14,
+            "avg_value": 155.71,
+            "current_value": 100.0,
+            "change_rate": -35.8,
+            "unit": "원/EA"
+      },
+      {
+            "code": "123558",
+            "name": "체크밸브_스윙형_10K_4B",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 8,
+            "avg_value": 133.33,
+            "current_value": 90.0,
+            "change_rate": -32.5,
+            "unit": "원/EA"
+      },
+      {
+            "code": "113539",
+            "name": "용접봉_E7018_3.2mm*350mm",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 18,
+            "avg_value": 48.71,
+            "current_value": 39.1,
+            "change_rate": -19.7,
+            "unit": "원/EA"
+      },
+      {
+            "code": "110767",
+            "name": "개스킷_링조인트_R-24_SUS316",
+            "supplier": "한국특수형강",
+            "risk_level": "high",
+            "valid_months": 31,
+            "avg_value": 15550.0,
+            "current_value": 13900.0,
+            "change_rate": -10.6,
+            "unit": "원/EA"
+      },
+      {
+            "code": "111329",
+            "name": "플랜지_LAP_10K_3B_SUS304",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 22,
+            "avg_value": 43.58,
+            "current_value": 39.1,
+            "change_rate": -10.3,
+            "unit": "원/EA"
+      }
+],
     rule3: [
-      { code: '212345', name: '도료_에폭시_프라이머_20L', supplier: '중화도료', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'high', contract_end: '2025-01-15', valid_months: 0 },
-      { code: '223456', name: '시너_표준형_18L', supplier: '삼화페인트', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'high', contract_end: '2025-01-20', valid_months: 0 },
-      { code: '234567', name: '고압호스_1/2_20m', supplier: '태광고무', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'high', contract_end: '2025-01-25', valid_months: 0 },
-      { code: '245678', name: '유압실린더_φ80_ST500', supplier: '한국유압', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'medium', contract_end: '2025-02-10', valid_months: 0 },
-      { code: '256789', name: '베어링_6310_2RS', supplier: 'NSK코리아', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'medium', contract_end: '2025-02-15', valid_months: 0 },
-      { code: '267890', name: '모터_3HP_4P_380V', supplier: '효성전기', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'low', contract_end: '2025-02-28', valid_months: 0 },
-      { code: '278901', name: '펌프_원심형_50A_3HP', supplier: '한일펌프', avg_value: 0, current_value: 0, change_rate: 0, risk_level: 'low', contract_end: '2025-03-05', valid_months: 0 },
-    ],
+      {
+            "code": "100370",
+            "name": "트랜섬플레이트_25T*3000*6000",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 35,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111291",
+            "name": "강관_SCH40_6B_ASTM A106",
+            "supplier": "동부스틸",
+            "risk_level": "medium",
+            "valid_months": 4,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111302",
+            "name": "캡_6B_SCH40_ASTM A234",
+            "supplier": "동국제강",
+            "risk_level": "low",
+            "valid_months": 16,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111303",
+            "name": "솔리드와이어_ER70S-6_1.0mm",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 17,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111304",
+            "name": "바텀플레이트_30T*2000*6000",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 19,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111305",
+            "name": "쉘플레이트_20T*2500*8000",
+            "supplier": "삼우산업",
+            "risk_level": "medium",
+            "valid_months": 7,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111305",
+            "name": "쉘플레이트_20T*2500*8000",
+            "supplier": "포스코",
+            "risk_level": "low",
+            "valid_months": 2,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      },
+      {
+            "code": "111306",
+            "name": "아연판_음극방식용_10kg",
+            "supplier": "포스코",
+            "risk_level": "medium",
+            "valid_months": 19,
+            "avg_value": 0,
+            "current_value": 0,
+            "change_rate": 0,
+            "contract_end": "2026.01.01"
+      }
+],
     rule4: [
-      { code: '312345', name: '앵글_L-75*75*6T', supplier: '동국제강', avg_value: 125, current_value: 312, change_rate: 149.6, risk_level: 'high', unit: '%', valid_months: 18 },
-      { code: '323456', name: '평철_FB_6T*50W', supplier: '포스코', avg_value: 89, current_value: 201, change_rate: 125.8, risk_level: 'high', unit: '%', valid_months: 16 },
-      { code: '334567', name: 'H빔_300*300*10/15', supplier: '현대제철', avg_value: 234, current_value: 491, change_rate: 109.8, risk_level: 'high', unit: '%', valid_months: 20 },
-      { code: '345678', name: '채널_C-100*50*5T', supplier: '동국제강', avg_value: 167, current_value: 317, change_rate: 89.8, risk_level: 'medium', unit: '%', valid_months: 15 },
-      { code: '356789', name: '환봉_STS304_φ30', supplier: '세아창원', avg_value: 78, current_value: 140, change_rate: 79.5, risk_level: 'medium', unit: '%', valid_months: 22 },
-      { code: '367890', name: '판재_AL5052_3T', supplier: '노벨리스', avg_value: 456, current_value: 775, change_rate: 70.0, risk_level: 'low', unit: '%', valid_months: 14 },
-    ],
+      {
+            "code": "118177",
+            "name": "엘보_45도_4B_SCH80_ASTM A234",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": -265.7,
+            "current_value": 1300.0,
+            "change_rate": 1565.7,
+            "unit": "%"
+      },
+      {
+            "code": "118176",
+            "name": "빔_박스형_400*200*10T",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": -260.5,
+            "current_value": 1300.0,
+            "change_rate": 1560.5,
+            "unit": "%"
+      },
+      {
+            "code": "123295",
+            "name": "강관_SCH160_4B_ASTM A106",
+            "supplier": "신아강업",
+            "risk_level": "medium",
+            "valid_months": 3,
+            "avg_value": 1258.0,
+            "current_value": -59.4,
+            "change_rate": 1317.4,
+            "unit": "%"
+      },
+      {
+            "code": "109544",
+            "name": "엘보_90도_6B_SCH40_ASTM A234",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 29,
+            "avg_value": 1217.3,
+            "current_value": 2.5,
+            "change_rate": 1214.7,
+            "unit": "%"
+      },
+      {
+            "code": "123267",
+            "name": "용접봉_E7018_3.2mm*350mm",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 3,
+            "avg_value": 1151.8,
+            "current_value": 5.9,
+            "change_rate": 1146.0,
+            "unit": "%"
+      },
+      {
+            "code": "123268",
+            "name": "와셔_평와셔_M20_SUS316",
+            "supplier": "KG스틸",
+            "risk_level": "medium",
+            "valid_months": 3,
+            "avg_value": 945.6,
+            "current_value": 39.0,
+            "change_rate": 906.6,
+            "unit": "%"
+      },
+      {
+            "code": "122975",
+            "name": "동관_C1220T_50A_2.0T",
+            "supplier": "KG스틸",
+            "risk_level": "low",
+            "valid_months": 1,
+            "avg_value": 739.7,
+            "current_value": -100.0,
+            "change_rate": 839.7,
+            "unit": "%"
+      },
+      {
+            "code": "114145",
+            "name": "핸드레일_SUS304_42.7mm*2.0T",
+            "supplier": "한국특수형강",
+            "risk_level": "low",
+            "valid_months": 8,
+            "avg_value": -611.5,
+            "current_value": -61.4,
+            "change_rate": 550.0,
+            "unit": "%"
+      }
+],
     rule5: [
-      { code: '412345', name: '소모품_연마석_7인치', supplier: '삼성연마', avg_value: 45, current_value: 156, change_rate: 246.7, risk_level: 'high', unit: '건', valid_months: 12 },
-      { code: '423456', name: '절삭공구_엔드밀_φ10', supplier: '한국OSG', avg_value: 23, current_value: 78, change_rate: 239.1, risk_level: 'high', unit: '건', valid_months: 18 },
-      { code: '434567', name: '안전장갑_내열_L', supplier: '세이프티', avg_value: 67, current_value: 189, change_rate: 182.1, risk_level: 'high', unit: '건', valid_months: 10 },
-      { code: '445678', name: '드릴비트_HSS_φ8', supplier: '대성드릴', avg_value: 34, current_value: 89, change_rate: 161.8, risk_level: 'medium', unit: '건', valid_months: 15 },
-      { code: '456789', name: '페인트붓_4인치', supplier: '대한솔', avg_value: 89, current_value: 201, change_rate: 125.8, risk_level: 'medium', unit: '건', valid_months: 8 },
-      { code: '467890', name: '마스킹테이프_24mm', supplier: '쓰리엠', avg_value: 123, current_value: 259, change_rate: 110.6, risk_level: 'low', unit: '건', valid_months: 14 },
-    ],
+      {
+            "code": "118174",
+            "name": "버터플라이밸브_10K_8B",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 5,
+            "avg_value": 50.0,
+            "current_value": 1614.3,
+            "change_rate": 1564.3,
+            "unit": "건"
+      },
+      {
+            "code": "118176",
+            "name": "빔_박스형_400*200*10T",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": 100.0,
+            "current_value": 1300.0,
+            "change_rate": 1200.0,
+            "unit": "건"
+      },
+      {
+            "code": "118177",
+            "name": "엘보_45도_4B_SCH80_ASTM A234",
+            "supplier": "KG스틸",
+            "risk_level": "high",
+            "valid_months": 6,
+            "avg_value": 100.0,
+            "current_value": 1300.0,
+            "change_rate": 1200.0,
+            "unit": "건"
+      },
+      {
+            "code": "118173",
+            "name": "아연말프라이머_숍프라이머_18L",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 5,
+            "avg_value": 50.0,
+            "current_value": 1025.0,
+            "change_rate": 975.0,
+            "unit": "건"
+      },
+      {
+            "code": "123052",
+            "name": "스티프너_T형_100*50*6T",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 9,
+            "avg_value": 1166.7,
+            "current_value": 206.9,
+            "change_rate": 959.8,
+            "unit": "건"
+      },
+      {
+            "code": "123557",
+            "name": "론지튜디널_10T*200*6000",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 12,
+            "avg_value": 1300.0,
+            "current_value": 372.4,
+            "change_rate": 927.6,
+            "unit": "건"
+      },
+      {
+            "code": "123558",
+            "name": "체크밸브_스윙형_10K_4B",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 8,
+            "avg_value": 1518.2,
+            "current_value": 645.9,
+            "change_rate": 872.3,
+            "unit": "건"
+      },
+      {
+            "code": "123051",
+            "name": "앵글_100*100*10_6M",
+            "supplier": "포스코",
+            "risk_level": "high",
+            "valid_months": 8,
+            "avg_value": 950.0,
+            "current_value": 87.5,
+            "change_rate": 862.5,
+            "unit": "건"
+      }
+],
   },
 };
 
 export const agentInsights = {
-  summary: `분석 결과, 총 156건의 이상 징후가 발견되었습니다.
+  summary: `분석 결과, 총 280건의 이상 징후가 발견되었습니다.
 
-🔴 즉시 확인 필요: 단가가 30% 이상 급락한 자재 2건
-🟠 주의 필요: 구매량 대비 재고 괴리가 큰 자재 15건
-🟡 모니터링: 계약 만료 1개월 내 자재 12건
+🔴 즉시 확인 필요: 단가가 10% 이상 변동한 자재 5건
+🟠 주의 필요: 구매량 대비 재고 괴리가 큰 자재 151건
+🟡 모니터링: 계약 만료 3개월 내 자재 88건
 
-가장 우선적으로 '용접봉_E7016' 자재를 확인해 보시기 바랍니다.`,
+가장 우선적으로 단가 변동이 큰 자재를 확인해 보시기 바랍니다.`,
 
   rule1: '수량 변동성이 높은 자재들은 계절적 요인이나 프로젝트 특성일 수 있지만, 비정상적인 과다 발주의 가능성도 검토가 필요합니다.',
-  rule2: '급격한 단가 하락은 품질 저하, 공급사 변경, 또는 비정상 거래의 신호일 수 있습니다. 특히 30% 이상 변동한 자재는 즉시 확인이 필요합니다.',
+  rule2: '급격한 단가 하락은 품질 저하, 공급사 변경, 또는 비정상 거래의 신호일 수 있습니다. 특히 20% 이상 변동한 자재는 즉시 확인이 필요합니다.',
   rule3: '계약 만료 임박 자재는 원활한 수급을 위해 재계약 협상을 미리 준비해야 합니다. 공급 단절 리스크를 예방하세요.',
   rule4: '구매량 대비 재고 괴리는 재고 관리 오류, 횡령, 또는 분실의 징후일 수 있습니다. 재고 실사를 권장드립니다.',
   rule5: '발주 건수 이상 증가는 분할 발주를 통한 결재 한도 회피 시도일 수 있습니다. 발주 패턴을 면밀히 분석해 주세요.',
