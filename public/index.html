@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANA - 한화오션 이상거래 탐지 AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        :root {
+            --primary: #FF6B00;
+            --secondary: #1E3A5F;
+            --danger: #EF4444;
+            --warning: #F97316;
+            --caution: #EAB308;
+            --success: #22C55E;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1E3A5F 0%, #2D5A87 100%);
+        }
+        
+        .agent-bubble {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8533 100%);
+            border-radius: 20px 20px 20px 5px;
+        }
+        
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: #FF6B00;
+            animation: blink 0.7s infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slideIn {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 2s infinite;
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-out;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .risk-high { background-color: #FEE2E2; border-left: 4px solid #EF4444; }
+        .risk-medium { background-color: #FED7AA; border-left: 4px solid #F97316; }
+        .risk-low { background-color: #FEF9C3; border-left: 4px solid #EAB308; }
+        
+        .terminal {
+            background: #0D1117;
+            color: #58A6FF;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+        
+        .terminal-line {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        
+        .tab-btn {
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background-color: #FF6B00;
+            color: white;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #FED7AA;
+        }
+        
+        .modal-overlay {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-ship text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold">한화오션 구매 이상거래 탐지 시스템</h1>
+                    <p class="text-xs text-white/70">HANA - Hanwha Ocean Anomaly Detection AI Agent</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-white/70">
+                    <i class="far fa-calendar-alt mr-1"></i>
+                    2025.12.01
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex gap-6">
+            <!-- Agent Sidebar -->
+            <aside class="w-80 flex-shrink-0">
+                <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+                    <!-- Agent Avatar -->
+                    <div class="text-center mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mb-3 shadow-lg animate-pulse-custom" id="agentAvatar">
+                            <i class="fas fa-robot text-4xl text-white"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">HANA</h2>
+                        <p class="text-sm text-gray-500">구매 이상거래 탐지 AI</p>
+                    </div>
+                    
+                    <!-- Agent Message -->
+                    <div class="agent-bubble text-white p-4 mb-6" id="agentMessage">
+                        <p class="text-sm" id="agentText">안녕하세요! 저는 구매 이상거래를 탐지하는 AI 에이전트 HANA입니다.</p>
+                    </div>
+                    
+                    <!-- Action Button -->
+                    <button id="startBtn" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl">
+                        <i class="fas fa-play-circle mr-2"></i>
+                        분석 시작하기
+                    </button>
+                    
+                    <!-- Status Indicator -->
+                    <div class="mt-6 pt-6 border-t border-gray-100" id="statusArea" style="display:none;">
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span id="statusText">분석 중...</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="flex-1" id="mainContent">
+                <!-- Landing Screen -->
+                <div id="landingScreen">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-3">AI 기반 구매 이상거래 탐지</h2>
+                        <p class="text-gray-600">Rule-Based 분석을 통해 구매 데이터의 이상 징후를 자동으로 탐지합니다</p>
+                    </div>
+                    
+                    <!-- Feature Cards -->
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white rounded-xl p-6 shadow-lg card-hover transition-all">
+                            <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-search text-2xl text-orange-500"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">5가지 Rule 분석</h3>
+                            <p class="text-sm text-gray-600">수량, 단가, 계약, 재고, 발주 패턴을 종합 분석합니다</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-lg card-hover transition-all">
+                            <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-bolt text-2xl text-blue-500"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">실시간 이상 탐지</h3>
+                            <p class="text-sm text-gray-600">최신 구매 데이터 기반 이상 징후를 즉시 발견합니다</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-lg card-hover transition-all">
+                            <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-chart-pie text-2xl text-green-500"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-2">직관적 시각화</h3>
+                            <p class="text-sm text-gray-600">대시보드로 결과를 한눈에 파악할 수 있습니다</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Overview -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg">
+                        <h3 class="font-bold text-gray-800 mb-4">
+                            <i class="fas fa-database text-orange-500 mr-2"></i>
+                            분석 대상 데이터
+                        </h3>
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-3xl font-bold text-gray-800">518</p>
+                                <p class="text-sm text-gray-500">자재 품목</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-3xl font-bold text-gray-800">62</p>
+                                <p class="text-sm text-gray-500">공급업체</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-3xl font-bold text-gray-800">36</p>
+                                <p class="text-sm text-gray-500">분석 개월</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <p class="text-3xl font-bold text-gray-800">5</p>
+                                <p class="text-sm text-gray-500">탐지 Rule</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing Screen -->
+                <div id="processingScreen" style="display:none;">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <!-- Progress Steps -->
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="text-lg font-bold text-gray-800" id="stepTitle">데이터 로딩 중...</span>
+                                <span class="text-sm text-gray-500" id="stepProgress">STEP 1/5</span>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-orange-400 to-orange-600 progress-bar" id="progressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step Icons -->
+                        <div class="flex justify-between mb-8">
+                            <div class="step-icon text-center" data-step="1">
+                                <div class="w-12 h-12 mx-auto rounded-full bg-orange-100 flex items-center justify-center mb-2" id="step1Icon">
+                                    <i class="fas fa-database text-orange-500"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">데이터 로딩</span>
+                            </div>
+                            <div class="step-icon text-center" data-step="2">
+                                <div class="w-12 h-12 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-2" id="step2Icon">
+                                    <i class="fas fa-cogs text-gray-400"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">전처리</span>
+                            </div>
+                            <div class="step-icon text-center" data-step="3">
+                                <div class="w-12 h-12 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-2" id="step3Icon">
+                                    <i class="fas fa-brain text-gray-400"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">Rule 분석</span>
+                            </div>
+                            <div class="step-icon text-center" data-step="4">
+                                <div class="w-12 h-12 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-2" id="step4Icon">
+                                    <i class="fas fa-exclamation-triangle text-gray-400"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">이상 탐지</span>
+                            </div>
+                            <div class="step-icon text-center" data-step="5">
+                                <div class="w-12 h-12 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-2" id="step5Icon">
+                                    <i class="fas fa-chart-bar text-gray-400"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">결과 생성</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Terminal -->
+                        <div class="terminal rounded-lg p-4 h-64 overflow-auto" id="terminal">
+                            <div class="terminal-line text-green-400">> HANA AI Agent 초기화...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Screen -->
+                <div id="dashboardScreen" style="display:none;">
+                    <!-- KPI Cards -->
+                    <div class="grid grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-5 shadow-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-500 text-sm">분석 자재</span>
+                                <i class="fas fa-box text-blue-500"></i>
+                            </div>
+                            <p class="text-3xl font-bold text-gray-800" id="kpiMaterials">0</p>
+                            <p class="text-xs text-gray-400">품목</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-500 text-sm">이상 징후</span>
+                                <i class="fas fa-exclamation-circle text-orange-500"></i>
+                            </div>
+                            <p class="text-3xl font-bold text-orange-600" id="kpiAnomalies">0</p>
+                            <p class="text-xs text-gray-400" id="kpiAnomaliesPercent">0%</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-500 text-sm">고위험</span>
+                                <i class="fas fa-fire text-red-500"></i>
+                            </div>
+                            <p class="text-3xl font-bold text-red-600" id="kpiHighRisk">0</p>
+                            <p class="text-xs text-gray-400">즉시 조사</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-500 text-sm">계약 임박</span>
+                                <i class="fas fa-calendar-times text-purple-500"></i>
+                            </div>
+                            <p class="text-3xl font-bold text-purple-600" id="kpiContracts">0</p>
+                            <p class="text-xs text-gray-400">3개월 이내</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white rounded-xl p-6 shadow-lg">
+                            <h3 class="font-bold text-gray-800 mb-4">
+                                <i class="fas fa-chart-bar text-orange-500 mr-2"></i>
+                                Rule별 탐지 현황
+                            </h3>
+                            <canvas id="ruleChart" height="200"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl p-6 shadow-lg">
+                            <h3 class="font-bold text-gray-800 mb-4">
+                                <i class="fas fa-chart-pie text-orange-500 mr-2"></i>
+                                위험도 분포
+                            </h3>
+                            <canvas id="riskChart" height="200"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Agent Insight -->
+                    <div class="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-6 mb-6 border border-orange-200">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-2">🤖 HANA의 분석 인사이트</h3>
+                                <div id="agentInsight" class="text-gray-700 space-y-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detail Tabs -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="flex border-b border-gray-200">
+                            <button class="tab-btn active px-6 py-3 font-medium text-sm" data-tab="rule1">
+                                Rule 1. 수량 변동
+                            </button>
+                            <button class="tab-btn px-6 py-3 font-medium text-sm text-gray-600" data-tab="rule2">
+                                Rule 2. 단가 변동
+                            </button>
+                            <button class="tab-btn px-6 py-3 font-medium text-sm text-gray-600" data-tab="rule3">
+                                Rule 3. 계약 임박
+                            </button>
+                            <button class="tab-btn px-6 py-3 font-medium text-sm text-gray-600" data-tab="rule4">
+                                Rule 4. 재고 괴리
+                            </button>
+                            <button class="tab-btn px-6 py-3 font-medium text-sm text-gray-600" data-tab="rule5">
+                                Rule 5. 발주 괴리
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div id="tabContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 modal-overlay hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-auto">
+                <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800" id="modalTitle">자재 상세</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-6" id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

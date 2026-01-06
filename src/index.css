@@ -1,0 +1,110 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-6;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:border-slate-200 transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/30;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300;
+  }
+  
+  .kpi-card {
+    @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/20;
+  }
+  
+  .risk-badge {
+    @apply px-3 py-1 rounded-full text-sm font-semibold;
+  }
+  
+  .risk-high {
+    @apply bg-red-100 text-red-700;
+  }
+  
+  .risk-medium {
+    @apply bg-orange-100 text-orange-700;
+  }
+  
+  .risk-low {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+  
+  .risk-normal {
+    @apply bg-green-100 text-green-700;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+  
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400;
+}
+
+/* Terminal style for logs */
+.terminal {
+  @apply bg-slate-900 text-green-400 font-mono text-sm rounded-xl p-4 overflow-auto;
+}
+
+.terminal-line {
+  @apply flex items-start gap-2;
+}
+
+.terminal-prefix {
+  @apply text-slate-500;
+}
+
+.terminal-success {
+  @apply text-green-400;
+}
+
+.terminal-warning {
+  @apply text-yellow-400;
+}
+
+.terminal-error {
+  @apply text-red-400;
+}
+
+.terminal-info {
+  @apply text-blue-400;
+}
