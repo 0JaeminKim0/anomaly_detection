@@ -61,7 +61,11 @@ export default function RuleChart({ rules, onRuleClick, selectedRule }: RuleChar
               dataKey="count"
               radius={[0, 4, 4, 0]}
               cursor="pointer"
-              onClick={(data) => onRuleClick?.(data.id)}
+              onClick={(data) => {
+                if (data && typeof data.id === 'number') {
+                  onRuleClick?.(data.id);
+                }
+              }}
             >
               {data.map((entry, index) => (
                 <Cell
